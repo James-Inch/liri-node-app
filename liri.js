@@ -4,7 +4,13 @@ require("dotenv").config();
 
 // var spotifyKey = require("./keys.js");
 
+// var geocoder = require("geocoder"); 
+
+// Try to make it so the location can give the full address of the venue
+
 var request = require("request");
+
+var moment = require("moment");
 
 var fs = require("fs");
 
@@ -18,7 +24,7 @@ function start(cmdArr) {
       movieThis(cmdArr.slice(1).join(" "));
       break;
     case "concert-this":
-      concertThis();
+      concertThis(cmdArr.slice(1).join(" "));
       break;
   }
 }
@@ -32,7 +38,7 @@ function movieThis(movieName) {
     if (!error && response.statusCode === 200) {
 
       var data = JSON.parse(body);
-    
+
       var imdbRating = (data.Ratings[0]["Value"]);
 
       var rtRating = (data.Ratings[1]["Value"]);
@@ -55,18 +61,7 @@ function movieThis(movieName) {
   });
 };
 
-function concertThis() {
-  var nodeArgs = process.argv;
-
-  var artist = "";
-
-  for (i = 3; i < nodeArgs.length; i++) {
-    if (i > 3 && i < nodeArgs.length) {
-      artist = artist + "+" + nodeArgs[i];
-    } else {
-      artist += nodeArgs[i];
-    }
-  };
+function concertThis(artist) {
 
   var url = ("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp");
 
@@ -74,8 +69,18 @@ function concertThis() {
 
     if (!error && response.statusCode === 200) {
       var response = (response);
-    var data = JSON.parse(body)[0].venue;
-    console.log(data);
+      // console.log(JSON.parse(body)[0]);
+      var data = JSON.parse(body)[0].venue;
+      // console.log(data);
+      var formatttedEventData = (`
+      ----------------------------------------------
+      Venue Name:    ${data.name}
+      Location:      ${data.city}, ${data.region}
+      Doors open on: ${moment(data.datetime).format("LL")} at ${moment(data.datetime).format("LTS")}
+      ----------------------------------------------
+      `);
+      
+      console.log(formatttedEventData);
     };
   });
 };
