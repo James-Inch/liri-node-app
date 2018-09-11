@@ -1,8 +1,8 @@
 require("dotenv").config();
 
-// var spotifyApi = require("node-spotify-api");
+var Spotify = require('node-spotify-api');
 
-// var spotifyKey = require("./keys.js");
+var spotifyKey = require("./keys.js");
 
 // var geocoder = require("geocoder"); 
 
@@ -26,6 +26,9 @@ function start(cmdArr) {
     case "concert-this":
       concertThis(cmdArr.slice(1).join(" "));
       break;
+    case "spotify-this-song":
+      spotifyThis(cmdArr.slice(1).join(" "));
+    break;
   }
 }
 // var spotify = new Spotify(keys.spotify);
@@ -82,6 +85,26 @@ function concertThis(artist) {
       
       console.log(formatttedEventData);
     };
+  });
+};
+
+function spotifyThis(song){
+
+  var spotify = new Spotify(
+    spotifyKey.spotify
+  );
+  
+  spotify.request('https://api.spotify.com/v1/tracks/7yCPwWs66K8Ba5lFuU2bcx')
+  .then(function(data) {
+    // console.log(data);
+    console.log(data.artists[0].name);
+
+    var formattedSongData = (`
+    
+    `)
+  })
+  .catch(function(err) {
+    console.error('Error occurred: ' + err); 
   });
 };
 
