@@ -28,7 +28,7 @@ function start(cmdArr) {
       break;
     case "spotify-this-song":
       spotifyThis(cmdArr.slice(1).join(" "));
-    break;
+      break;
   }
 }
 // var spotify = new Spotify(keys.spotify);
@@ -82,31 +82,39 @@ function concertThis(artist) {
       Doors open on: ${moment(data.datetime).format("LL")} at ${moment(data.datetime).format("LTS")}
       ----------------------------------------------
       `);
-      
+
       console.log(formatttedEventData);
     };
   });
 };
 
-function spotifyThis(song){
+function spotifyThis(song) {
 
   var spotify = new Spotify(
     spotifyKey.spotify
   );
-  
-  spotify.request('https://api.spotify.com/v1/tracks/7yCPwWs66K8Ba5lFuU2bcx')
-  .then(function(data) {
-    console.log(data);
 
-    console.log(data.artists[0].name);
+  spotify
+    .search({ type: 'track', query: song })
+    .then(function (response) {
 
-    var formattedSongData = (`
-    
-    `)
-  })
-  .catch(function(err) {
-    console.error('Error occurred: ' + err); 
-  });
+      var songData = (response.tracks.items[0]);
+
+      var formattedSongData = (
+        `
+        Artist: ${songData.artists[0].name}
+        Song: ${songData.name}
+        Preview: ${songData.external_urls.spotify}
+        Album: ${songData.album.name}
+        `
+      );
+
+      console.log(formattedSongData);
+
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
 };
 
 function doWhatItSays() {
