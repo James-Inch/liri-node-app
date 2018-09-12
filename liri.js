@@ -96,7 +96,8 @@ function spotifyThis(song){
   
   spotify.request('https://api.spotify.com/v1/tracks/7yCPwWs66K8Ba5lFuU2bcx')
   .then(function(data) {
-    // console.log(data);
+    console.log(data);
+
     console.log(data.artists[0].name);
 
     var formattedSongData = (`
