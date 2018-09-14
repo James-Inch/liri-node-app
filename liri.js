@@ -14,9 +14,9 @@ var moment = require("moment");
 
 var fs = require("fs");
 
-var inportantStuff = process.argv.slice(2)
+var importantStuff = process.argv.slice(2)
 
-start(inportantStuff);
+start(importantStuff);
 
 function start(cmdArr) {
   switch (cmdArr[0]) {
@@ -42,15 +42,13 @@ function movieThis(movieName) {
 
       var data = JSON.parse(body);
 
-      var imdbRating = (data.Ratings[0]["Value"]);
-
-      var rtRating = (data.Ratings[1]["Value"]);
+      // console.log(data);
 
       var formattedMovieInfo = (`
       Title: ${data.Title}
       Year: ${data.Year}  
-      IMDB Rating: ${imdbRating}
-      Rotten Tomatoes Rating: ${rtRating}
+      IMDB Rating: ${data.Ratings[0].Value}
+      Rotten Tomatoes Rating: ${data.Ratings[1].Value}
       Produced in: ${data.Country}
       You can watch it in: ${data.Language}
       Actors: ${data.Actors}
@@ -99,7 +97,7 @@ function spotifyThis(song) {
     .then(function (response) {
 
       var songData = (response.tracks.items[0]);
-
+      
       var formattedSongData = (
         `
         Artist: ${songData.artists[0].name}
